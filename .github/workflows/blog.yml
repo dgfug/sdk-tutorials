@@ -6,6 +6,8 @@ on:
       - master
 jobs:
   build:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-go@v2
