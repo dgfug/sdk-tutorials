@@ -1,14 +1,21 @@
-#!/usr/bin/make -f
+###############################################################################
+###                                Linting                                  ###
+###############################################################################
 
-build-website:
-	npm install
-	./node_modules/.bin/vuepress build
+golangci_version=v1.55.0
 
-deploy-website: build-website
-	cd .vuepress/dist && \
-	echo "role_arn = ${DEPLOYMENT_ROLE_ARN}" >> /root/.aws/config ; \
-	echo "CI job = ${CIRCLE_BUILD_URL}" >> version.html ; \
-	aws s3 sync . s3://"${WEBSITE_BUCKET}" --profile terraform --delete ; \
-	aws cloudfront create-invalidation --distribution-id "${CF_DISTRIBUTION_ID}" --profile terraform --path "/*" ;
+lint-install:
+	@echo "--> Installing golangci-lint $(golangci_version)"
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
 
-.PHONY: build-website deploy-website
+lint:
+	@echo "--> Running linter"
+	$(MAKE) lint-install
+	@./scripts/go-lint-all.bash --timeout=15m
+
+lint-fix:
+	@echo "--> Running linter"
+	$(MAKE) lint-install
+	@./scripts/go-lint-all.bash --fix
+
+.PHONY: lint lint-fix

@@ -1,24 +1,7 @@
-# OS
-.DS_Store
-*.swp
-*.swo
-.vscode
-.idea
-
-# Build
-vendor
-.vendor-new
-build
-node_modules/
-yarn-error.log
-.vuepress/dist
-.cache/
-.build/
-dist/
-
-# IDE
-.idea/
-*.iml
-
-# vscode 
-*.code-workspace 
+build/exampled
+build/
+data/
+config/
+Library/
+go.work
+go.work.sum
